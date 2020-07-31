@@ -71,9 +71,23 @@ for a = 1:length(prefixes)
         % correct sample times for recording skips. 
         nSegments = length(metadata.timestamps);
         if nSegments == 1
-            spike.times = spike.times + metadata.timestamps;
+            spike.times = spike.times + uint64(metadata.timestamps);
         else
-            warning('Everything is wrong - you need to write the code to deal with multi segments.'); 
+            totSamps = 0;
+            nSamps = [0; metadata.samples];
+            for seg = 1:length(nSamps)-1
+               totSamps = totSamps + nSamps(seg);
+               sampLoss = metadata.timestamps(seg)-totSamps;
+               thisBlock = spike.times > nSamps(seg);
+               if sampLoss > 3000
+                   keyboard;
+               end
+               if seg > 1
+                fprintf('\nLost %i samples, incrementing subsequent spike times.', sampLoss);
+                    spike.times(thisBlock) = ...  
+                    spike.times(thisBlock) + uint64(sampLoss);
+               end
+            end
         end
         spike.ms = double(spike.times)/metadata.sampleRate*1000;
 

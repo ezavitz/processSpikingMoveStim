@@ -5,18 +5,19 @@
 % 
 % fprintf('Array & Penetration ID: %i \n', pen);
 % 
-% addpath(genpath('~/utilities'))
+addpath(genpath('~/code/utilities'))
+addpath(genpath('~/code/NPMK'))
 % addpath('~/corrStructure_V1MT/AnalyseV1MT'); 
 
 clc; clear; 
-force = 0;
-rootDir = '~/Documents/data/CJ177/007';
+force = 1;
+rootDir = '~/sz11/data/CJ191/002';
 prefixes = {'V1','MT'};
 
 chanOrder{1} = 1:96; %to do -- make this a reshaped Utah channel 10x10 map
 chanOrder{2} = [13 23 5 25 6 24 14 27 7 26 4 28 8 20 3 29 9 19 2 31 10 30 1 32 11 22 12 21 15 18 16 17];
 
-thisPathRoot = '~/Documents/data/'; 
+thisPathRoot = '~/sz11/data/'; 
 
 % file is a cell array of penetrations with fields animalName, ID, Utah mapFile, etc.      
 param.allTypes = {'Dots', 'SineWave', 'Square', 'PSsquare'}; 
