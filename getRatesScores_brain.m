@@ -58,23 +58,25 @@ function [tcs, Zscs, tcs_byFile] = getRatesScores_brain(param, sTrain, onsetInds
          Zscs.(param.windows{w}).(param.allTypes{type}) = cell(nAreas,nDirs); 
          for f = 1:nAreas
              for d = 1:nDirs
-                fRate = [tcs.(param.windows{w}).(param.allTypes{type}){f,:}];
+                 keyboard;
+                fRate = [tcs.(param.windows{w}).(param.allTypes{type}){f,d}];
                 if param.nTrialsSlowWin > 0
                     runMean = movmean(fRate, param.nTrialsSlowWin, 2);
                     runSTD  = movstd(fRate, param.nTrialsSlowWin,0,2);
 
                     % convert to a running Z-score
-                    runZ = (fRate - runMean)./runSTD;                      
+                    runZ = (fRate - runMean)./runSTD;      
+                    
+                    % save in a data structure in the same format as tcs.
+                    Zscs.(param.windows{w}).(param.allTypes{type}){f,d} = ...
+                        runZ(:, param.nTrialsSlowWin+1:end-param.nTrialsSlowWin); 
 
                  else % use all responses to this direction
-                    runMean = mean(fRate); 
-                    runSTD  = std(fRate);  
-                    runZ    = (fRate-runMean)/runSTD;
+                    runZ = zscore(fRate);
+                    % save in a data structure in the same format as tcs.
+                    Zscs.(param.windows{w}).(param.allTypes{type}){f,d} = ...
+                        runZ; 
                 end
-
-                % save in a data structure in the same format as tcs.
-                Zscs.(param.windows{w}).(param.allTypes{type}){f,d} = ...
-                    runZ(:, param.nTrialsSlowWin+1:end-param.nTrialsSlowWin); 
              end
          end
     end
