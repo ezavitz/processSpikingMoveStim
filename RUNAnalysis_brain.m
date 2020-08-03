@@ -11,13 +11,12 @@ addpath(genpath('~/code/NPMK'))
 
 clc; clear; 
 force = 1;
-rootDir = '~/sz11/data/CJ191/002';
+thisPathRoot = '~/Documents/data'; 
+rootDir = [thisPathRoot '/CJ177/007'];
 prefixes = {'V1','MT'};
 
 chanOrder{1} = 1:96; %to do -- make this a reshaped Utah channel 10x10 map
 chanOrder{2} = [13 23 5 25 6 24 14 27 7 26 4 28 8 20 3 29 9 19 2 31 10 30 1 32 11 22 12 21 15 18 16 17];
-
-thisPathRoot = '~/sz11/data/'; 
 
 % file is a cell array of penetrations with fields animalName, ID, Utah mapFile, etc.      
 param.allTypes = {'Dots', 'SineWave', 'Square', 'PSsquare'}; 
@@ -34,7 +33,8 @@ saveName = sprintf('%s%scombinedData.mat', rootDir, filesep);
 if ~exist(saveName, 'file') || force
     [sTrain, onsetInds, StimFile, isSU] = combineData(rootDir, prefixes);
     fprintf('\n Saving %s \n', saveName);
-    save(saveName, 'sTrain', 'onsetInds', 'StimFile', 'chanOrder', 'isSU', '-v7.3');
+    save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
+                   'param', 'chanOrder', 'isSU',  '-v7.3');
 else 
     load(saveName);  
 end
@@ -44,7 +44,7 @@ if ~exist(saveName, 'file') || force
     [tcs, Zscs, tcs_byFile] = ...
             getRatesScores_brain(param, sTrain, onsetInds, StimFile);
     fprintf('\n Saving %s \n', saveName);
-    save(saveName, 'Zscs', 'tcs', 'tcs_byFile', 'chanOrder');
+    save(saveName, 'Zscs', 'tcs', 'tcs_byFile', 'chanOrder', 'param');
 else 
     load(saveName);
 end
