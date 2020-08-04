@@ -58,7 +58,6 @@ function [tcs, Zscs, tcs_byFile] = getRatesScores_brain(param, sTrain, onsetInds
          Zscs.(param.windows{w}).(param.allTypes{type}) = cell(nAreas,nDirs); 
          for f = 1:nAreas
              for d = 1:nDirs
-                 keyboard;
                 fRate = [tcs.(param.windows{w}).(param.allTypes{type}){f,d}];
                 if param.nTrialsSlowWin > 0
                     runMean = movmean(fRate, param.nTrialsSlowWin, 2);

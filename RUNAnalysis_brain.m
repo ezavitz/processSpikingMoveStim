@@ -11,8 +11,8 @@ addpath(genpath('~/code/NPMK'))
 
 clc; clear; 
 force = 1;
-thisPathRoot = '~/Documents/data'; 
-rootDir = [thisPathRoot '/CJ177/007'];
+thisPathRoot = '~/sz11/data'; 
+rootDir = [thisPathRoot '/CJ191/002'];
 prefixes = {'V1','MT'};
 
 chanOrder{1} = 1:96; %to do -- make this a reshaped Utah channel 10x10 map
@@ -23,7 +23,7 @@ param.allTypes = {'Dots', 'SineWave', 'Square', 'PSsquare'};
 param.windows = {'Move', 'Blank'}; 
 param.window{1} = [50 550];
 param.window{2} = [650 1000];
-param.nTrialsSlowWin = 10; % number of trials over which to calculate the slow fluctuation of the mean
+param.nTrialsSlowWin = 0; % number of trials over which to calculate the slow fluctuation of the mean
                            % set this to <= 0 to z-score over all trials at once.
 % for SDFs
 param.sWin = 1000; %SDF window size (ms)
