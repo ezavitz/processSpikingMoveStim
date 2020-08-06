@@ -35,10 +35,10 @@ param.sBin = 50;   %SDF boxcar size (ms)
 
 saveName = sprintf('%s%scombinedData.mat', rootDir, filesep);
 if ~exist(saveName, 'file') || force
-    [sTrain, onsetInds, StimFile, isSU] = combineData(rootDir, prefixes);
+    [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
     fprintf('\n Saving %s \n', saveName);
     save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
-                   'param', 'chanOrder', 'isSU',  '-v7.3');
+                   'param', 'chanOrder', 'clustInfo',  '-v7.3');
 else 
     load(saveName);  
 end

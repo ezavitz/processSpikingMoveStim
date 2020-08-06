@@ -1,7 +1,7 @@
 % root dir: directory that contains data for this batch
 % prefixes: batch prefixes, i.e. {'MT', 'V1'}
 
-function [sTrain, onsetInds, StimFile, isSU] = combineData(rootDir, prefixes)
+function [sTrain, onsetInds, StimFile, clust] = combineData(rootDir, prefixes)
 
     tmp = split(rootDir, filesep);
     batch  = tmp{end};
@@ -13,12 +13,13 @@ for a = 1:length(prefixes)
     fileList = getFileListFromDirs(pathRoot, '[0-9][0-9][0-9]');
         
     % LOAD (ONE BATCH)
-    clust.clusterInfo = readmatrix([pathRoot 'kilosort2/cluster_group.tsv'], 'FileType', 'Text', 'OutputType', 'string');
+    clust.clusterInfo = readmatrix([pathRoot 'kilosort2/cluster_info.tsv'], 'FileType', 'Text', 'OutputType', 'string');
     clust.index = 1:size(clust.clusterInfo,1);
 
-    clust.isUnit = clust.clusterInfo(:,2) == 'good' | ...
-                   clust.clusterInfo(:,2) == 'mua';
-    clust.isSU   = clust.clusterInfo(:,2) == 'good';
+    clust.isUnit = clust.clusterInfo(:,9) == 'good' | ...
+                   clust.clusterInfo(:,9) == 'mua';
+    clust.isSU   = clust.clusterInfo(:,9) == 'good';
+    clust.ch     = clust.clusterInfo(clust.isUnit, 6); 
     
     for f = 1:length(fileList)
         fprintf(' %s ', fileList{f})
