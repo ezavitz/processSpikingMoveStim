@@ -1,18 +1,22 @@
-% idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
-% arrayTaskID = str2num(idStr); % conv string to number
-% pen = arrayTaskID; 
+idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
+arrayTaskID = str2num(idStr); % conv string to number
+pen = arrayTaskID; 
 % 
 % 
-% fprintf('Array & Penetration ID: %i \n', pen);
+% 
 % 
 addpath(genpath('~/code/utilities'))
 addpath(genpath('~/code/NPMK'))
 % addpath('~/corrStructure_V1MT/AnalyseV1MT'); 
 
+allFiles = {'/CJ177/007', '/CJ177/008', '/CJ179/012', '/CJ191/002'};
+
 clc; clear; 
 force = 1;
 thisPathRoot = '~/sz11/data'; 
-rootDir = [thisPathRoot '/CJ191/002'];
+rootDir = [thisPathRoot allFiles{pen}];
+fprintf('Array & Penetration ID: %s \n', allFiles{pen});
+
 prefixes = {'V1','MT'};
 
 chanOrder{1} = 1:96; %to do -- make this a reshaped Utah channel 10x10 map
