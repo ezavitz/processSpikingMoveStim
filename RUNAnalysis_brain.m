@@ -1,13 +1,10 @@
 idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
 arrayTaskID = str2num(idStr); % conv string to number
 pen = arrayTaskID; 
-% 
-% 
-% 
-% 
+
 addpath(genpath('~/code/utilities'))
 addpath(genpath('~/code/NPMK'))
-% addpath('~/corrStructure_V1MT/AnalyseV1MT'); 
+addpath(genpath('~/code/processSpikingMoveStim')) 
 
 allFiles = {'/CJ177/007', '/CJ177/008', '/CJ179/012', '/CJ191/002'};
 
