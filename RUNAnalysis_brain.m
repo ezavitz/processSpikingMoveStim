@@ -1,5 +1,4 @@
 idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
-fprintf('test\n')
 fprintf('ID %s\n', idStr);
 arrayTaskID = str2num(idStr); % conv string to number
 pen = arrayTaskID; 
@@ -9,8 +8,9 @@ addpath(genpath('~/code/NPMK'))
 addpath(genpath('~/code/processSpikingMoveStim')) 
 
 allFiles = {'/CJ177/007', '/CJ177/008', '/CJ179/012', '/CJ191/002'};
-fprintf('test file 1: %s\n' allFiles{1});
-clc; clear; 
+fprintf('test file 1: %s\n', allFiles{1});
+fprintf('taskID: %s\n', allFiles{pen});
+
 force = 1;
 thisPathRoot = '~/sz11/data'; 
 rootDir = [thisPathRoot allFiles{pen}];
