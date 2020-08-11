@@ -7,8 +7,7 @@ addpath(genpath('~/code/utilities'))
 addpath(genpath('~/code/NPMK'))
 addpath(genpath('~/code/processSpikingMoveStim')) 
 
-allFiles = {'/CJ177/007', '/CJ177/008', '/CJ179/012', '/CJ191/002'};
-fprintf('test file 1: %s\n', allFiles{1});
+allFiles = {'/CJ177/007', '/CJ177/008', '/CJ179/012', '/CJ179/013', '/CJ191/002'};
 fprintf('taskID: %s\n', allFiles{pen});
 
 force = 1;

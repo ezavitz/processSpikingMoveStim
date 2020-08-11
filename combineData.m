@@ -1,7 +1,7 @@
 % root dir: directory that contains data for this batch
 % prefixes: batch prefixes, i.e. {'MT', 'V1'}
 
-function [sTrain, onsetInds, StimFile, clust] = combineData(rootDir, prefixes)
+function [sTrain, onsetInds, StimFile, clusters] = combineData(rootDir, prefixes)
 
     tmp = split(rootDir, filesep);
     batch  = tmp{end};
@@ -20,6 +20,7 @@ for a = 1:length(prefixes)
                    clust.clusterInfo(:,9) == 'mua';
     clust.isSU   = clust.clusterInfo(:,9) == 'good';
     clust.ch     = clust.clusterInfo(clust.isUnit, 6); 
+    clusters{a} = clust; 
     
     for f = 1:length(fileList)
         fprintf(' %s ', fileList{f})
