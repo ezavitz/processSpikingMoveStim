@@ -23,7 +23,7 @@ end
 %   in at least one of the 12 directions
 
 % parameters 
-minResp  = 3;  % minimum responsiveness
+minResp  = 1.5;  % minimum responsiveness
 trialBin = 100; % number of trials to average over
 trialDur = 0.5; 
 
