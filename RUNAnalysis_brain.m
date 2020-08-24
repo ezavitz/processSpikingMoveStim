@@ -1,11 +1,23 @@
-idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
-fprintf('ID %s\n', idStr);
-arrayTaskID = str2num(idStr); % conv string to number
-pen = arrayTaskID; 
+if getenv('SLURM_ARRAY_TASK_ID')
+    idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
+    fprintf('ID %s\n', idStr);
+	arrayTaskID = str2num(idStr); % conv string to number
+	pen = arrayTaskID; 
+    thisJob = getenv('$SLURM_JOB_NAME');
+else
+    pen = 1;
+end
 
-addpath(genpath('~/code/utilities'))
-addpath(genpath('~/code/NPMK'))
-addpath(genpath('~/code/processSpikingMoveStim')) 
+if ismac 
+    thisPathRoot = '/Users/ezavitz/Documents/data/';
+else
+    thisPathRoot = '~/sz11/data/';
+    addpath(genpath('~/code/utilities'))
+    addpath(genpath('~/code/NPMK'))
+    addpath(genpath('~/code/processSpikingMoveStim')) 
+end
+
+fPre = ''; % use this to prefix other versions of preprocessed data
 
 allFiles = {'/CJ177/007', ...
             '/CJ177/008', ...
@@ -18,7 +30,7 @@ allFiles = {'/CJ177/007', ...
 fprintf('taskID: %s\n', allFiles{pen});
 
 force = 1;
-thisPathRoot = '~/sz11/data'; 
+
 rootDir = [thisPathRoot allFiles{pen}];
 fprintf('Array & Penetration ID: %s \n', allFiles{pen});
 
@@ -38,7 +50,7 @@ param.nTrialsSlowWin = 0; % number of trials over which to calculate the slow fl
 param.sWin = 1000; %SDF window size (ms)
 param.sBin = 50;   %SDF boxcar size (ms)
 
-saveName = sprintf('%s%scombinedData.mat', rootDir, filesep);
+saveName = sprintf('%s%s%scombinedData.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
     [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
     fprintf('\n Saving %s \n', saveName);
@@ -47,8 +59,8 @@ if ~exist(saveName, 'file') || force
 else 
     load(saveName);  
 end
-
-saveName = sprintf('%s%sfRates.mat', rootDir, filesep);
+ 
+saveName = sprintf('%s%s%sfRates.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
     [tcs, Zscs, tcs_byFile] = ...
             getRatesScores_brain(param, sTrain, onsetInds, StimFile);
@@ -58,7 +70,7 @@ else
     load(saveName);
 end
 
-saveName = sprintf('%s%sSDFs.mat', rootDir, filesep);
+saveName = sprintf('%s%s%sSDFs.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
     [all_sdfs] = getSDF_brain(param, sTrain, onsetInds, StimFile);
     fprintf('\n Saving %s \n', saveName);
@@ -67,7 +79,7 @@ else
     load(saveName);
 end
 
-saveName = sprintf('%s%sexclusions.mat', rootDir, filesep);
+saveName = sprintf('%s%s%sexclusions.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
     [OK] = getExclusions(tcs);
     fprintf('\n Saving %s \n', saveName);
