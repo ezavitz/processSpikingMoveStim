@@ -71,7 +71,9 @@ function [tcs, Zscs, tcs_byFile] = getRatesScores_brain(param, sTrain, onsetInds
                         runZ(:, param.nTrialsSlowWin+1:end-param.nTrialsSlowWin); 
 
                  else % use all responses to this direction
-                    runZ = zscore(fRate);
+                    
+                    runZ = zscore(fRate,0,2);
+                    
                     % save in a data structure in the same format as tcs.
                     Zscs.(param.windows{w}).(param.allTypes{type}){f,d} = ...
                         runZ; 
