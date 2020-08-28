@@ -8,15 +8,6 @@ else
     pen = 1;
 end
 
-if ismac 
-    thisPathRoot = '/Users/ezavitz/Documents/data';
-else
-    thisPathRoot = '~/sz11/data/';
-    addpath(genpath('~/code/utilities'))
-    addpath(genpath('~/code/NPMK'))
-    addpath(genpath('~/code/processSpikingMoveStim')) 
-end
-
 allFiles = {'/CJ177/007', ...
             '/CJ177/008', ...
             '/CJ179/012', ...

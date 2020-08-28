@@ -1,3 +1,12 @@
+if ismac 
+    thisPathRoot = '/Users/ezavitz/Documents/data';
+else
+    thisPathRoot = '~/sz11/data/';
+    addpath(genpath('~/code/utilities'))
+    addpath(genpath('~/code/NPMK'))
+    addpath(genpath('~/code/processSpikingMoveStim')) 
+end
+
 configureBatch; 
 
 fPre = ''; % use this to prefix other versions of preprocessed data
