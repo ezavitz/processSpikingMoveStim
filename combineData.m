@@ -81,9 +81,6 @@ for a = 1:length(prefixes)
                totSamps = totSamps + nSamps(seg);
                sampLoss = metadata.timestamps(seg)-totSamps;
                thisBlock = spike.times > nSamps(seg);
-               if sampLoss > 3000
-                   keyboard;
-               end
                if seg > 1
                 fprintf('\nLost %i samples, incrementing subsequent spike times.', sampLoss);
                     spike.times(thisBlock) = ...  
