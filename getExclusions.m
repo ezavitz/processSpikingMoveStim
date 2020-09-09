@@ -15,48 +15,41 @@ nUnits = tmp(:, 1);                             % how many units per area
 for ia = 1:nAreas
    OK.isVisual{ia} = zeros(nTypes, nUnits(ia));   
    OK.anyVisual{ia} = zeros(1, nUnits(ia));   
-   OK.isResponsive{ia} = zeros(nTypes, nUnits(ia));
    OK.DSI{ia} = zeros(nTypes, nUnits(ia));
 end
 
-% Criterion 1: Must be above threshold responsiveniss throughout experiment
+
+% Must respond more to move than blank throughout experiment
 %   in at least one of the 12 directions
 
 % parameters 
-minResp  = 1.5;  % minimum responsiveness
-trialBin = 100; % number of trials to average over
-trialDur = 0.5; 
+pThresh = 0.05;
+nBins = 4;
+
 
 for ia = 1:nAreas   
 for it = 1:nTypes
     overThresh = zeros(nUnits(ia), nDirs);
 for id = 1:nDirs
-    tmp = movmean(tcs.Move.(types{it}){ia,id},trialBin,2);
-    rate = tmp(:, trialBin:trialBin:end)/trialDur;
-    overThresh(:, id) = prod(rate > minResp, 2);
-end
-    OK.isResponsive{ia}(it, :) = sum(overThresh, 2) > 1;
-end
-end
-
-% Criterion 2: More responsive to Move period than to Blank period for at 
-%               least one direction
-
-% parameters
-pThresh = 0.05;
-
-for ia = 1:nAreas   
-for it = 1:nTypes
-    p = zeros(nUnits(ia), nDirs);
-    for iu = 1:nUnits(ia)
-    for id = 1:nDirs    
-        d1 = tcs.Move.(types{it}){ia, id}(iu, :)';
-        d2 = tcs.Blank.(types{it}){ia, id}(iu, :)';
-        p(iu, id) = kruskalwallis([d1 d2], [], 'off');
-    end
-    end
+    tmpMV = tcs.Move.(types{it}){ia,id};
+    tmpBK = tcs.Blank.(types{it}){ia,id};
     
-    OK.isVisual{ia}(it, :) = sum(p<pThresh, 2) > 1;
+    nTrials = size(tmpBK, 2);
+    trialStep = nTrials/nBins;
+    binStarts = 1:trialStep:nTrials;
+    for iu = 1:nUnits(ia)
+        p = zeros(1, nBins);
+        for ib = 1:nBins
+            trialRange = binStarts(ib):binStarts(ib)+trialStep-1;
+            p(ib) = kruskalwallis([tmpBK(iu,trialRange)' ...
+                                   tmpMV(iu,trialRange)'], [], 'off');
+        end
+        % if all bins are significantly modulated
+        if prod(p < pThresh) ~= 0 
+            OK.isVisual{ia}(it, iu) = 1;
+        end
+    end
+end
 end
     OK.anyVisual{ia} = sum(OK.isVisual{ia}) > 0;
 end
