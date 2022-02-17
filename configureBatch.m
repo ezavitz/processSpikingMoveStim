@@ -16,6 +16,8 @@ allFiles = {'/CJ177/007', ...
             '/CJ190/001', ...
             '/CJ190/003', ...
             '/CJ191/002'};
-
+        
 fprintf('Array & Penetration ID: %s \n', allFiles{pen});
-rootDir = [thisPathRoot allFiles{pen}];
+
+configurePaths;
+rootDir = [thisPathRoot allFiles{pen}]
