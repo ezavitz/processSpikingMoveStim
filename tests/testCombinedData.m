@@ -5,6 +5,8 @@ configureBatch;
 dataFile = sprintf('%s%s%s', rootDir, filesep, 'combinedData.mat');
 assert(exist(dataFile, 'file'), [dataFile ' not found']);
 load(dataFile);
+assert(length(onsetInds) == length(sTrain), ...
+    'File count mismatch between trial onsets and spike trains!');
 
 % Does the chanOrder = the number of units (if not KS)
 fprintf('TESTING: chanOrder. Are maps consistent with spike train? \n'); 
@@ -68,11 +70,95 @@ for iFile = 1:nFiles
     end
 end 
 
-%% Examine onset inds
+%% Examine onset inds triall totals and timing
 
+nFiles = length(onsetInds); 
+nArrays = length(onsetInds{1}); 
 
+nTrials = zeros(nArrays,nFiles);
+for iFile = 1:nFiles
+    nTrials(:, iFile) = cellfun(@(x) size(x, 2), onsetInds{iFile});
+end
 
+disp(table(nTrials)); 
+if length(unique(nTrials(:))) == 1
+   fprintf('All arrays and files contain data for %i trials \n', ...
+       nTrials(1)); 
+else
+    if sum(diff(nTrials)) == 0 
+        fprintf('All files contain the same number of trials between arrays \n');
+    else
+        fprintf('Trial mismatch between arrays - something may have gone wrong! \n');
+    end
+end
 
+fprintf('Generating Figure 2 to summarise inter-trial latency... \n')
+figure(2); clf; hold on;
+y = -10:1:10; %ms offset to examine
+filex = zeros(nFiles, length(y)-1);  % accumulate fine delay freq by file
+nPlus = zeros(nFiles);               % count large delay freq by file
+
+for iFile = 1:nFiles
+    itiGoal = 1000*(StimFile{iFile}.tMove + StimFile{iFile}.tBlank);
+    for iArray = 1:nArrays
+        subplot(1, nArrays, iArray); hold on;
+        itiActual = diff(onsetInds{iFile}{iArray}(1,:));
+        filex(iFile, :) = histcounts(itiActual-itiGoal, y);
+        
+        smallMiss = sum(abs(itiActual-itiGoal) > 10);
+        bigMiss = sum(abs(itiActual-itiGoal) > 100);
+        
+        lText{iArray}{iFile} = sprintf('File %i, n > 10ms = %i, n > 100ms = %i', ...
+            iFile, smallMiss, bigMiss);
+        
+        if iFile == nFiles
+            bar(filex', 'stacked');
+            set(gca, 'XTick', 1:length(y), 'XTickLabel', y);
+            title(['Array ' num2str(iArray)])
+            legend(lText{iArray});
+            ylabel('Trial Count'); 
+            xlabel('Trial onset relative to target (ms)');
+        end
+    end
+end
+
+%% report file types across recordings.
+
+for iFile = 1:nFiles
+for iArray = 1:nArrays
+    dirList  = unique(onsetInds{iFile}{iArray}(2,:));
+    typeList = unique(onsetInds{iFile}{iArray}(4,:));
+
+    nDirs   = length(dirList); 
+    nTypes  = length(typeList); 
+
+    nTrials{iArray} = zeros(nTypes, nDirs); 
+    for iType = 1:nTypes
+        for iDir = 1:nDirs
+            nTrials{iArray}(iType, iDir) = sum(onsetInds{1}{1}(2,:) == 0 & ...
+                                       onsetInds{1}{1}(4,:) == 1);
+        end
+    end
+end
+
+fprintf('File %i: Type 1 = %s, 2 = %s', ...
+            iFile, StimFile{iFile}.type{1}, StimFile{iFile}.type{2});
+if nTypes > 2; fprintf(', 3 = %s',  StimFile{iFile}.type{3}); end
+if nTypes > 3; fprintf(', 4 = %s',  StimFile{iFile}.type{4}); end
+fprintf('\n');
+
+if ~sum(nTrials{1}(:)-nTrials{2}(:))
+    typeInd = [nan; typeList']; 
+    trialTable = [typeInd [dirList; nTrials{1}]];
+    
+    
+    disp(trialTable);
+else
+    fprintf(['Trial types do not match between simultaneously recorded' ...
+             ' arrays! Something has gone wrong. \n']);
+end
+end
+%%
 % FUNCTION
 % iterate through the spike train and check that the number of channels
 % matches our expectation. 
