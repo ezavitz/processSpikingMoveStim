@@ -1,4 +1,8 @@
 clear; clc;
+
+codeRoot = '~/Documents/code/';
+addpath(genpath([codeRoot 'processSpikingMoveStim'])) 
+
 configureBatch;
 
 % Find and load combined data
@@ -124,6 +128,7 @@ end
 
 %% report file types across recordings.
 
+clear nTrials
 for iFile = 1:nFiles
 for iArray = 1:nArrays
     dirList  = unique(onsetInds{iFile}{iArray}(2,:));
@@ -158,6 +163,53 @@ else
              ' arrays! Something has gone wrong. \n']);
 end
 end
+
+%% does the stimulus file agree with onsetInds about 
+%% how many trials there should be?
+
+checkSum = 0;
+for iArray = 1:nArrays
+for iFile = 1:nFiles
+    onSize= size(onsetInds{iFile}{iArray}, 2);
+    stimSize = StimFile{iFile}.nTrials;
+    if onSize ~= stimSize
+        checkSum = checkSum + 1;
+        warning(['Trial count mismatch between stimulus '...
+                    'file and recording in Array %i, File %i'], iArray, iFile);
+    end
+end
+end
+
+if ~checkSum
+    fprintf('All stimulus files and recordings agree on trial count. \n');
+end
+
+%% Rasters of ALL THE SPIKES
+%%% -------- you probably don't want this, this is a terrible idea
+
+% figure(3); clf;
+% % raster of one channel
+% iArray = 1; iCh = 3; 
+% tInd = 1;
+% for iFile = 1:nFiles
+%     isSpike = sTrain{iFile}{iArray}(iCh,:); 
+%     trialOns = onsetInds{iFile}{iArray}(1,:);
+%     itis = diff(trialOns);
+%     itis = [itis mode(itis)];
+% 
+%     fprintf('plotting %i spikes \n', sum(isSpike));
+%     for iTrial = 1:length(trialOns)
+%        ms = 1:itis(iTrial);
+%        tStart = trialOns(iTrial);
+%        theseSpikes = logical(isSpike(tStart:tStart+itis(iTrial)-1));
+%        yLevel = ones(1, length(ms))*tInd; 
+%        plot(ms(theseSpikes), yLevel(theseSpikes), '.', ...
+%            'Color', a(iFile, :)); hold on;
+%        tInd = tInd + 1; 
+%     end
+% end
+
+
 %%
 % FUNCTION
 % iterate through the spike train and check that the number of channels
