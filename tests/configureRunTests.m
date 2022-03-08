@@ -33,33 +33,35 @@ allFiles = {'/CJ177/007', ...
             '/CJ190/003', ...
             '/CJ191/002'};
 
-rootDir = [thisPathRoot '/data' allFiles{pen}];
+for pen = 1:length(allFiles)        
+    rootDir = [thisPathRoot '/data' allFiles{pen}];
 
-testOutPath = [thisPathRoot '/results/dataQuality' allFiles{pen}];
-if ~exist(testOutPath, 'dir')
-    mkdir(testOutPath);
+    testOutPath = [thisPathRoot '/results/dataQuality' allFiles{pen}];
+    if ~exist(testOutPath, 'dir')
+        mkdir(testOutPath);
+    end
+
+    diaryName = 'dataTestOutput.txt';
+
+
+    if exist([testOutPath filesep diaryName], 'file') 
+        delete([testOutPath filesep diaryName])
+    end
+
+    diary([testOutPath filesep diaryName]);
+    exportFmt = 'jpg';
+
+    fprintf('Array & Penetration ID: %s \n', allFiles{pen});
+
+    fprintf('Running tests on combinedData.mat... \n');
+    testCombinedData;
+
+    fprintf('Running tests on fRates.mat... \n');
+    testFRates;
+
+    fprintf('Running tests on SDFs.mat... \n');
+    testSDFs;
+
+    diary off
 end
-
-diaryName = 'dataTestOutput.txt';
-
-
-if exist([testOutPath filesep diaryName], 'file') 
-    delete([testOutPath filesep diaryName])
-end
-
-diary([testOutPath filesep diaryName]);
-exportFmt = 'jpg';
-
-fprintf('Array & Penetration ID: %s \n', allFiles{pen});
-
-fprintf('Running tests on combinedData.mat... \n');
-testCombinedData;
-
-fprintf('Running tests on fRates.mat... \n');
-testFRates;
-
-fprintf('Running tests on SDFs.mat... \n');
-testSDFs;
-
-diary off
 
