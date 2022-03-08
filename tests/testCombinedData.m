@@ -40,7 +40,8 @@ a = a(1:floor(length(a)/nFiles):length(a), :);
 
 fprintf('Generating Figure 1 to show spike counts and recording duration for each file overall... \n')
     figure(1); clf; set(gcf, 'Position', [14 185 1307 490]);
-imSaveName = sprintf('%s%scombined_SpikeCounts.pdf',testOutPath,filesep); 
+imSaveName = sprintf('%s%scombined_SpikeCounts.%s', ...
+    testOutPath,filesep, exportFmt); 
 for iFile = 1:nFiles
     recMin = cellfun(@(x) size(x,2)/(1000*60), sTrain{iFile});
     for iArray = 1:length(sTrain{iFile})
@@ -95,7 +96,8 @@ end
 
 fprintf('Generating Figure 2 to summarise inter-trial latency... \n')
 figure(2); clf; set(gcf, 'Position', [45 148 1368 556]);
-imSaveName = sprintf('%s%scombined_trialTiming.pdf',testOutPath,filesep); 
+imSaveName = sprintf('%s%scombined_trialTiming.%s',...
+    testOutPath,filesep, exportFmt); 
 hold on;
 y = -10:1:10; %ms offset to examine
 filex = zeros(nFiles, length(y)-1);  % accumulate fine delay freq by file

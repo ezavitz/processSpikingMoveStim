@@ -48,6 +48,7 @@ if exist([testOutPath filesep diaryName], 'file')
 end
 
 diary([testOutPath filesep diaryName]);
+exportFmt = 'jpg';
 
 fprintf('Array & Penetration ID: %s \n', allFiles{pen});
 

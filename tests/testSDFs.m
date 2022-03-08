@@ -20,7 +20,8 @@ for iArray = 1:2
     [nCh, nReps, nMs] = size(all_sdfs.Dots{iArray,1});
     
 for iCh = 1:nCh
-    imSaveName = sprintf('%sSDF_A%i_ch%i.pdf', testOutPath, iArray, iC h); 
+    imSaveName = sprintf('%s%sSDF_A%i_ch%i.%s', ...
+        testOutPath, filesep, iArray, iCh, exportFmt); 
     if isSU(iCh); uType = 'SU'; else; uType = 'MUA'; end
     for iType = 1:nTypes
         sdfMap = zeros(nReps, nDir*nMs); 
