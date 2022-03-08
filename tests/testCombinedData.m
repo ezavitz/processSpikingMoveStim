@@ -1,14 +1,8 @@
-clear; clc;
-
-codeRoot = '~/Documents/code/';
-addpath(genpath([codeRoot 'processSpikingMoveStim'])) 
-
-configureBatch;
 
 % Find and load combined data
 dataFile = sprintf('%s%s%s', rootDir, filesep, 'combinedData.mat');
-assert(exist(dataFile, 'file'), [dataFile ' not found']);
 load(dataFile);
+
 assert(length(onsetInds) == length(sTrain), ...
     'File count mismatch between trial onsets and spike trains!');
 
@@ -45,7 +39,8 @@ a = colormap('magma');
 a = a(1:floor(length(a)/nFiles):length(a), :); 
 
 fprintf('Generating Figure 1 to show spike counts and recording duration for each file overall... \n')
-figure(1); clf;
+    figure(1); clf; set(gcf, 'Position', [14 185 1307 490]);
+imSaveName = sprintf('%s%scombined_SpikeCounts.pdf',testOutPath,filesep); 
 for iFile = 1:nFiles
     recMin = cellfun(@(x) size(x,2)/(1000*60), sTrain{iFile});
     for iArray = 1:length(sTrain{iFile})
@@ -64,7 +59,7 @@ for iFile = 1:nFiles
         if iFile == nFiles
            xlabel('Log-10 Spike Count');
            ylabel('Frequency'); 
-           legend(lText{iArray});
+           legend(lText{iArray}, 'Location', 'NorthWest');
            
            titleText = sprintf('Array %i, %i SU and %i MU', ...
                iArray, nMU(iArray), nSU(iArray));
@@ -73,6 +68,8 @@ for iFile = 1:nFiles
         end
     end
 end 
+exportgraphics(gcf, imSaveName);
+    close gcf;
 
 %% Examine onset inds triall totals and timing
 
@@ -97,7 +94,9 @@ else
 end
 
 fprintf('Generating Figure 2 to summarise inter-trial latency... \n')
-figure(2); clf; hold on;
+figure(2); clf; set(gcf, 'Position', [45 148 1368 556]);
+imSaveName = sprintf('%s%scombined_trialTiming.pdf',testOutPath,filesep); 
+hold on;
 y = -10:1:10; %ms offset to examine
 filex = zeros(nFiles, length(y)-1);  % accumulate fine delay freq by file
 nPlus = zeros(nFiles);               % count large delay freq by file
@@ -125,6 +124,8 @@ for iFile = 1:nFiles
         end
     end
 end
+exportgraphics(gcf, imSaveName);
+close gcf;
 
 %% report file types across recordings.
 

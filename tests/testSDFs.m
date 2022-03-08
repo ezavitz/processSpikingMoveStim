@@ -1,10 +1,3 @@
-clear; clc;
-
-codeRoot = '~/Documents/code/';
-addpath(genpath([codeRoot 'processSpikingMoveStim'])) 
-
-configureBatch;
-
 % Find and load SDFs
 dataFile = sprintf('%s%s%s', rootDir, filesep, 'SDFs.mat');
 load(dataFile);
@@ -13,12 +6,12 @@ load(dataFile, 'onsetInds', 'StimFile', 'clustInfo');
 dataFile = sprintf('%s%s%s', rootDir, filesep, 'exclusions.mat');
 load(dataFile, 'OK');
 
-imSavePath = '/Users/ezavitz/Documents/code/corrStructure_V1MT/results/dataQuality/';
+
 typeList = fieldnames(all_sdfs);
 nFiles = length(onsetInds); 
 thisDirOrder = cell(1, length(typeList)); 
 
-
+%%
 dirs = unique(onsetInds{1}{1}(2,:)); 
 nDir = length(dirs);
 nTypes = length(typeList); 
@@ -27,7 +20,7 @@ for iArray = 1:2
     [nCh, nReps, nMs] = size(all_sdfs.Dots{iArray,1});
     
 for iCh = 1:nCh
-    imSaveName = sprintf('%sSDF_A%i_ch%i', imSavePath, iArray, iCh); 
+    imSaveName = sprintf('%sSDF_A%i_ch%i.pdf', testOutPath, iArray, iC h); 
     if isSU(iCh); uType = 'SU'; else; uType = 'MUA'; end
     for iType = 1:nTypes
         sdfMap = zeros(nReps, nDir*nMs); 
@@ -51,7 +44,8 @@ for iCh = 1:nCh
         title(tString); 
 
     end
-    set(gcf, 'PaperOrientation', 'Landscape'); print(imSaveName, '-dpdf', '-bestfit');
+    exportgraphics(gcf, imSaveName);
+    close gcf;
 end
 end
 
