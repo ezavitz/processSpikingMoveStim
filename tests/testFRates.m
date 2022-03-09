@@ -7,7 +7,8 @@ load(dataFile);
 %% show tuning curves for the same stimulus type for each file (in order of recording)
 typeList = fieldnames(tcs_byFile.Move);
 nFiles = length(tcs_byFile.Move.(typeList{1}));
-[nArrays, nDir] = size(tcs_byFile.Move.(typeList{1}){1});
+nArrays = cellfun(@(x) size(x, 1), tcs_byFile.Move.(typeList{1}));
+nDir = cellfun(@(x) size(x, 2), tcs_byFile.Move.(typeList{1}));
 
 a = make2Dmap(length(typeList), nFiles, 'linear');
 
