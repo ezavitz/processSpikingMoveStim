@@ -20,4 +20,4 @@ allFiles = {'/CJ177/007', ...
 fprintf('Array & Penetration ID: %s \n', allFiles{pen});
 
 configurePaths;
-rootDir = [thisPathRoot allFiles{pen}]
+rootDir = [thisPathRoot allFiles{pen}];

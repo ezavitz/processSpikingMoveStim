@@ -1,7 +1,7 @@
 % show tuning curves for each channel, for each file. 
 configureBatch;
 
-fPre = 'NEV'; % use this to prefix other versions of preprocessed data
+fPre = ''; % use this to prefix other versions of preprocessed data
 
 load([rootDir filesep fPre 'fRates.mat'], 'tcs_byFile', 'param')
 
