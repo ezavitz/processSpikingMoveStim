@@ -87,8 +87,8 @@ end
 
 for iArray = 1:nArrays
     figure(iArray); clf; set(gcf, 'Position', [26 31 1376 766]);
-    imSaveName = sprintf('%s%sfRates_moveBlank.%s',...
-        testOutPath,filesep, exportFmt);
+    imSaveName = sprintf('%s%sfRates_A%i_moveBlank.%s',...
+        testOutPath,filesep, iArray, exportFmt);
 
     nCh = size(tcs.Move.(typeList{1}){iArray, 1}, 1);
 
@@ -123,8 +123,8 @@ end
 a = make2Dmap(length(typeList), 7, 'linear');
 for iArray = 1:2
     figure(iArray); clf; set(gcf, 'Position', [26 31 1376 766]);
-    imSaveName = sprintf('%s%sfRates_zscsByTime.%s',...
-        testOutPath,filesep, exportFmt);
+    imSaveName = sprintf('%s%sfRates_A%i_zscsByTime.%s',...
+        testOutPath,filesep, iArray, exportFmt);
 
     nCh = size(tcs.Move.(typeList{1}){iArray, 1}, 1);
 
