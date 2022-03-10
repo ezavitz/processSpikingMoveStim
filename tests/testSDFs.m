@@ -20,6 +20,7 @@ for iArray = 1:2
     [nCh, nReps, nMs] = size(all_sdfs.Dots{iArray,1});
     
 for iCh = 1:nCh
+    figure(); set(gcf, 'Position', [342 32 1225 832]);
     imSaveName = sprintf('%s%sSDF_A%i_ch%i.%s', ...
         testOutPath, filesep, iArray, iCh, exportFmt); 
     if isSU(iCh); uType = 'SU'; else; uType = 'MUA'; end
