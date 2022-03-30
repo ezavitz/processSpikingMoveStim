@@ -2,10 +2,15 @@
 % prefixes: batch prefixes, i.e. {'MT', 'V1'}
 
 function [sTrain, onsetInds, StimFile, clusters, sortInfo] = ...
-    combineData(rootDir, prefixes)
+    combineData(rootDir, prefixes, ksFlag)
 
     tmp = split(rootDir, filesep);
     batch  = tmp{end};
+    
+    if nargin < 3 % if there's no request for sort data, don't include it
+        ksFlag = 0;
+        sortInfo = [];
+    end
 
 for a = 1:length(prefixes)
     fprintf('\nProcessing Recordings from %s :', prefixes{a})
@@ -111,9 +116,11 @@ for a = 1:length(prefixes)
         
         StimFile{f}   = stimData.Stim;
         
-        sortInfo{f,a}.useClusters = clust.index(clust.isUnit);
-        sortInfo{f,a}.sTimes      = spike.ms;
-        sortInfo{f,a}.amps        = spike.amp;
-        sortInfo{f,a}.cluster     = spike.cluster;
+        if ksFlag
+            sortInfo{f,a}.useClusters = clust.index(clust.isUnit);
+            sortInfo{f,a}.sTimes      = spike.ms;
+            sortInfo{f,a}.amps        = spike.amp;
+            sortInfo{f,a}.cluster     = spike.cluster;
+        end
     end
 end
