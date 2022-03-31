@@ -1,10 +1,16 @@
 % root dir: directory that contains data for this batch
 % prefixes: batch prefixes, i.e. {'MT', 'V1'}
 
-function [sTrain, onsetInds, StimFile, clusters] = combineData(rootDir, prefixes)
+function [sTrain, onsetInds, StimFile, clusters, sortInfo] = ...
+    combineData(rootDir, prefixes, ksFlag)
 
     tmp = split(rootDir, filesep);
     batch  = tmp{end};
+    
+    if nargin < 3 % if there's no request for sort data, don't include it
+        ksFlag = 0;
+        sortInfo = [];
+    end
 
 for a = 1:length(prefixes)
     fprintf('\nProcessing Recordings from %s :', prefixes{a})
@@ -44,7 +50,8 @@ for a = 1:length(prefixes)
         % ------- load spike times + cluster IDs
         spike.times   = readNPY([pathRoot fileNum filesep 'kilosort2/spike_times.npy']); % in samples
         spike.cluster = readNPY([pathRoot fileNum filesep 'kilosort2/spike_clusters.npy']);
-
+        spike.amp     = readNPY([pathRoot fileNum filesep 'kilosort2/amplitudes.npy']);
+        
         % GET TIMING INTO MS
         % ------- stimulus onsets
         [onsetTimes] = NevDatatoStimOnsets(nevData);
@@ -107,6 +114,13 @@ for a = 1:length(prefixes)
                 stimData.Stim.trials.(permFields{param})(1:nTrialsActual);
         end
         
-        StimFile{f} = stimData.Stim; 
+        StimFile{f}   = stimData.Stim;
+        
+        if ksFlag
+            sortInfo{f,a}.useClusters = clust.index(clust.isUnit);
+            sortInfo{f,a}.sTimes      = spike.ms;
+            sortInfo{f,a}.amps        = spike.amp;
+            sortInfo{f,a}.cluster     = spike.cluster;
+        end
     end
 end
