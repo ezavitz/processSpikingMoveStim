@@ -55,7 +55,7 @@ for id = 1:nDirs
                                     tmpMV(iu,trialRange), 'tail', 'left');
         end
         % if all bins are significantly modulated
-        if all(p < pThresh)
+        if all(p(iu, :, :) < pThresh)
             OK.isVisual{ia}(it, iu) = 1;
         end
     end
