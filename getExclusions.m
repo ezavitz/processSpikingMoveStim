@@ -1,4 +1,13 @@
 % getExclusionCriteria
+% 
+% OK.byTime{ia}(nTypes, nUnits(ia), nTrials): for a time window, is the
+%                   unit responding? 
+% OK.isVisual{ia}(nTypes, nUnits(ia)): does the unit respond at all
+%                   windows for the specified type?
+% OK.anyVisual{ia}(1, nUnits(ia)): does the unit respond at all windows for
+%                   at least one type?
+% OK.DSI{ia}(nTypes, nUnits(ia)): what is the diresction selectivity?
+
 function [OK] = getExclusions(tcs)
 
 % figure out some data-related parameters
@@ -24,8 +33,8 @@ for id = 1:nDirs
     tmpMV = tcs.Move.(types{it}){ia,id};
     tmpBK = tcs.Blank.(types{it}){ia,id};
     
-    nTrials = size(tmpBK, 2);
-    nBins = ceil(nTrials/trialStep);
+    nTrials = size(tmpBK, 2);           % how many trials overall
+    nBins = ceil(nTrials/trialStep);    % how many bins to test for responsiveness
     binStarts = 1:trialStep:nTrials;
     
     %preallocate
@@ -40,18 +49,22 @@ for id = 1:nDirs
         for ib = 1:nBins
             trialRange = binStarts(ib):binStarts(ib)+trialStep-1;
             trialRange = trialRange(trialRange <= length(tmpBK)); %last bin may have fewer trials
+            % in this block of trials, does the move period have significantly 
+            % higher spiking than the blank period?
             p(iu, ib, id) = ranksum(tmpBK(iu,trialRange), ...
                                     tmpMV(iu,trialRange), 'tail', 'left');
         end
         % if all bins are significantly modulated
-        if prod(p < pThresh) ~= 0 
+        if all(p < pThresh)
             OK.isVisual{ia}(it, iu) = 1;
         end
     end
 end
     h = p < pThresh; % check p-value against alpha
-    hAnyDir = sum(h, 3) > 0;
-    OK.byTime{ia}(it, :, :) = repelem(hAnyDir, 1, trialStep);
+    hAnyDir = sum(h, 3) > 0; % make sure at least one direction has p > alpha
+    % restore trial resolution for ease of use (note that significance
+    % testing is still only done in block resolution).
+    OK.byTime{ia}(it, :, :) = repelem(hAnyDir, 1, trialStep); 
 end
     OK.anyVisual{ia} = sum(OK.isVisual{ia}) > 0;
 end
