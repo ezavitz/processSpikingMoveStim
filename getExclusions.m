@@ -8,7 +8,7 @@
 %                   at least one type?
 % OK.DSI{ia}(nTypes, nUnits(ia)): what is the diresction selectivity?
 
-function [OK] = getExclusions(tcs)
+function [OK] = getExclusions(tcs, varargin)
 
 % figure out some data-related parameters
 types = fieldnames(tcs.Move);                   % what types
@@ -23,8 +23,17 @@ nUnits = tmp(:, 1);                             % how many units per area
 %   in at least one of the 12 directions
 
 % parameters 
-pThresh = 0.05;
-trialStep = 10; %test 10 trials at a time for visual responsiveness (move > blank)
+if nargin < 3
+    pThresh = 0.05;
+    if nargin < 2
+        trialStep = 10;
+    else 
+        trialStep = varargin{2}; 
+    end
+else 
+    pThresh = varargin{3};
+end
+
 
 for ia = 1:nAreas   
 for it = 1:nTypes
