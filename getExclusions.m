@@ -34,6 +34,8 @@ else
     pThresh = varargin{3};
 end
 
+nTrials = size(tcs.Blank.(types{1}){1,1}, 2);           % how many trials overall
+nBins = ceil(nTrials/trialStep);    % how many bins to test for responsiveness
 
 for ia = 1:nAreas   
 for it = 1:nTypes
