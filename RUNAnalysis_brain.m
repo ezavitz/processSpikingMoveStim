@@ -1,3 +1,8 @@
+if ismac 
+    cd('/Users/ezavitz/Documents/code/processSpikingMoveStim');
+else
+    cd('~/code/processSpikingMoveStim');
+end
 
 configureBatch; 
 
