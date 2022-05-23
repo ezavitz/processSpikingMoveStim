@@ -1,16 +1,9 @@
 
 configureBatch; 
-if ismac 
-else
-    addpath(genpath('~/code/utilities'))
-    addpath(genpath('~/code/NPMK'))
-    addpath(genpath('~/code/processSpikingMoveStim')) 
-end
 
 fPre = ''; % use this to prefix other versions of preprocessed data
 
-force = 0;
-
+force = 1;
 
 prefixes = {'V1','MT'};
 
@@ -34,8 +27,9 @@ if ~exist(saveName, 'file') || force
     fprintf('\n Saving %s \n', saveName);
     save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
                    'param', 'chanOrder', 'clustInfo',  '-v7.3');
-else 
-    load(saveName);  
+else
+    fprintf('%s already exists.\n', saveName);
+    load(saveName, 'param', 'sTrain', 'onsetInds', 'StimFile');  
 end
  
 saveName = sprintf('%s%s%sfRates.mat', rootDir, filesep, fPre);
@@ -44,8 +38,9 @@ if ~exist(saveName, 'file') || force
             getRatesScores_brain(param, sTrain, onsetInds, StimFile);
     fprintf('\n Saving %s \n', saveName);
     save(saveName, 'Zscs', 'tcs', 'tcs_byFile', 'chanOrder', 'param');
-else 
-    load(saveName);
+else
+    fprintf('%s already exists.\n', saveName);
+    load(saveName, 'tcs');
 end
 
 saveName = sprintf('%s%s%sSDFs.mat', rootDir, filesep, fPre);
@@ -54,7 +49,7 @@ if ~exist(saveName, 'file') || force
     fprintf('\n Saving %s \n', saveName);
     save(saveName, 'all_sdfs', 'param', '-v7.3');
 else
-    load(saveName);
+    fprintf('%s already exists.\n', saveName); 
 end
 
 saveName = sprintf('%s%s%sexclusions.mat', rootDir, filesep, fPre);
@@ -63,5 +58,5 @@ if ~exist(saveName, 'file') || force
     fprintf('\n Saving %s \n', saveName);
     save(saveName, 'OK');
 else
-    load(saveName);
+    fprintf('%s already exists.\n', saveName);
 end
