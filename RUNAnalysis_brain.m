@@ -26,12 +26,24 @@ param.nTrialsSlowWin = 0; % number of trials over which to calculate the slow fl
 param.sWin = 1000; %SDF window size (ms)
 param.sBin = 50;   %SDF boxcar size (ms)
 
+
+tmp = split(allFiles{pen}, filesep);
+
+%%
+
 saveName = sprintf('%s%s%scombinedData.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
-    [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
-    fprintf('\n Saving %s \n', saveName);
-    save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
-                   'param', 'chanOrder', 'clustInfo',  '-v7.3');
+    if str2double(tmp{2}(3:end)) < 200 % if we're in the old data set
+        [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
+        fprintf('\n Saving %s \n', saveName);
+        save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
+                       'param', 'chanOrder', 'clustInfo',  '-v7.3');
+    else
+        [sTrain, onsetInds, StimFile, chanOrder] = combineDataMarmolab(rootDir, prefixes);
+        fprintf('\n Saving %s \n', saveName);
+        save(saveName, 'sTrain', 'onsetInds', 'StimFile', ...
+                       'param', 'chanOrder', '-v7.3');
+    end
 else
     fprintf('%s already exists.\n', saveName);
     load(saveName, 'param', 'sTrain', 'onsetInds', 'StimFile');  
