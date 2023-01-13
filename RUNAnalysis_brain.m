@@ -8,7 +8,7 @@ configureBatch;
 
 fPre = ''; % use this to prefix other versions of preprocessed data
 
-force = 1;
+force = 0;
 
 prefixes = {'V1','MT'};
 
@@ -29,7 +29,6 @@ param.sBin = 50;   %SDF boxcar size (ms)
 
 tmp = split(allFiles{pen}, filesep);
 
-%%
 
 saveName = sprintf('%s%s%scombinedData.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
@@ -39,7 +38,7 @@ if ~exist(saveName, 'file') || force
         save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
                        'param', 'chanOrder', 'clustInfo',  '-v7.3');
     else
-        [sTrain, onsetInds, StimFile, chanOrder] = combineDataMarmolab(rootDir, prefixes);
+        [sTrain, onsetInds, StimFile, chanOrder] = combineDataMarmolab(rootDir, param.allTypes);
         fprintf('\n Saving %s \n', saveName);
         save(saveName, 'sTrain', 'onsetInds', 'StimFile', ...
                        'param', 'chanOrder', '-v7.3');
@@ -48,7 +47,7 @@ else
     fprintf('%s already exists.\n', saveName);
     load(saveName, 'param', 'sTrain', 'onsetInds', 'StimFile');  
 end
- 
+
 saveName = sprintf('%s%s%sfRates.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
     [tcs, Zscs, tcs_byFile] = ...
