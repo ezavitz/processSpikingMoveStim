@@ -30,7 +30,11 @@ param.sBin = 50;   %SDF boxcar size (ms)
 tmp = split(allFiles{pen}, filesep);
 
 
+<<<<<<< Updated upstream
 saveName = sprintf('%s%s%scombinedData.mat', rootDir, filesep, fPre);
+=======
+saveName = sprintf('%s%s%scombinedData_P%i_Ch%i.mat', rootDir, filesep, fPre, pen, whichCh);
+>>>>>>> Stashed changes
 if ~exist(saveName, 'file') || force
     if str2double(tmp{2}(3:end)) < 200 % if we're in the old data set
         [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
@@ -38,7 +42,11 @@ if ~exist(saveName, 'file') || force
         save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
                        'param', 'chanOrder', 'clustInfo',  '-v7.3');
     else
+<<<<<<< Updated upstream
         [sTrain, onsetInds, StimFile, chanOrder] = combineDataMarmolab(rootDir, param.allTypes);
+=======
+        [sTrain, onsetInds, StimFile, chanOrder] = combineDataMarmolab(rootDir, param.allTypes, whichCh);
+>>>>>>> Stashed changes
         fprintf('\n Saving %s \n', saveName);
         save(saveName, 'sTrain', 'onsetInds', 'StimFile', ...
                        'param', 'chanOrder', '-v7.3');
