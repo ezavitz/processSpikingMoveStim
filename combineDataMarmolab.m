@@ -1,5 +1,5 @@
 function [sTrain, onsetInds, StimFile, chanOrder] = ...
-    combineDataMarmolab(rootDir, allTypes)
+    combineDataMarmolab(rootDir, allTypes, whichCh)
     
     tmp = split(rootDir, filesep); % get the animal mame
     expression = sprintf('%s\\.motionStim\\.[0-9]{6}\\.mat', tmp{end-1});
@@ -16,7 +16,7 @@ for iFile = 1:length(fileList)
     % areas) if you don't provide a consecutive list of channels to load. 
     d = marmodata.mdbase([rootDir filesep fileList{iFile}],'loadArgs', ...
     {'loadEye',false,'spikes',true,'source','ghetto', ...
-    'reload',true,'channels',[1 2],'useCAR',false}); %% need to remove channels argument to process all
+    'reload',true, 'channels', whichCh, 'useCAR',false}); %% need to remove channels argument to process all
     
     % CREATE ONSET INDS
     % load neurostim file

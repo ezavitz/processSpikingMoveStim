@@ -10,3 +10,7 @@ end
 addpath(genpath([codeRoot 'utilities']))
 addpath(genpath([codeRoot 'NPMK']))
 addpath(genpath([codeRoot 'processSpikingMoveStim'])) 
+addpath(genpath([codeRoot 'neurostim']))
+addpath(genpath([codeRoot 'marmodata'])) 
+addpath(genpath([codeRoot 'marmolab-stimuli'])) 
+addpath(genpath([codeRoot 'marmolab-common'])) 
