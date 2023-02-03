@@ -3,7 +3,7 @@ function [all_sdfs] = getSDF_brain(param, sTrain, onsetInds, StimFile)
 nTypes  = length(StimFile{1}.type); 
 theseDirs = unique(onsetInds{1}{1}(2,:));   % get a direction list
 nDirs     = length(theseDirs); 
-nFiles    = length(sTrain); 
+nFiles    = length(onsetInds); 
 nAreas    = length(sTrain{1});
 
 for p = 1:length(param.allTypes) %pre-allocate tuning curve structurebinRes
