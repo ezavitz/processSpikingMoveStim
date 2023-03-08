@@ -12,7 +12,6 @@ fileNames = getFileListFromDirs(dataDir, 'combinedData_P[0-9]*_Ch[0-9]*\.mat');
 nCh = length(fileNames); 
 areaBreak = 64; % what channel is the last channel in V1?
 nChTot = min(areaBreak, nCh);
-%%
 
 % these increment in loop 
 aInd = 1; 
