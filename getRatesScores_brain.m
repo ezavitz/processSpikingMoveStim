@@ -12,7 +12,7 @@ function [tcs, Zscs, tcs_byFile] = getRatesScores_brain(param, sTrain, onsetInds
     % === Count some things === %
     nDirs     = length(StimFile{1}.testList); % get a direction list, assume same for all files in batch.
     nTypes    = length(param.allTypes); 
-    nFiles    = length(sTrain); 
+    nFiles    = length(onsetInds); 
     nWindows  = length(param.windows);
     [~, nAreas]    = size(sTrain{1});
     

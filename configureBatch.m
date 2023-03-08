@@ -2,10 +2,16 @@ if getenv('SLURM_ARRAY_TASK_ID')
     idStr = getenv('SLURM_ARRAY_TASK_ID'); % get task ID string 
     fprintf('ID %s\n', idStr);
 	arrayTaskID = str2num(idStr); % conv string to number
-	pen = arrayTaskID; 
+    
+    [chs, pens] = meshgrid(1:128, 9:10);
+    
+    whichCh = chs(arrayTaskID); 
+    pen     = pens(arrayTaskID);
+    
     thisJob = getenv('$SLURM_JOB_NAME');
 else
-    pen = 1;
+    whichCh = 32;
+    pen = 9;
 end
 
 allFiles = {'/CJ177/007', ...
@@ -15,9 +21,11 @@ allFiles = {'/CJ177/007', ...
             '/CJ179/016', ...
             '/CJ190/001', ...
             '/CJ190/003', ...
-            '/CJ191/002'};
+            '/CJ191/002', ...
+            '/CJ223/003', ...
+            '/CJ223/004'};
         
-fprintf('Array & Penetration ID: %s \n', allFiles{pen});
+fprintf('Pen %i Ch %i \n', pen, whichCh); 
 
 configurePaths;
 rootDir = [thisPathRoot allFiles{pen}];

@@ -8,7 +8,7 @@ configureBatch;
 
 fPre = ''; % use this to prefix other versions of preprocessed data
 
-force = 1;
+force = 0;
 
 prefixes = {'V1','MT'};
 
@@ -26,17 +26,35 @@ param.nTrialsSlowWin = 0; % number of trials over which to calculate the slow fl
 param.sWin = 1000; %SDF window size (ms)
 param.sBin = 50;   %SDF boxcar size (ms)
 
+tmp = split(allFiles{pen}, filesep);
+
 saveName = sprintf('%s%s%scombinedData.mat', rootDir, filesep, fPre);
+
+chByCh = getFileListFromDirs(rootDir,'combinedData_P[0-9]+_Ch[0-9]+\.mat');
+
 if ~exist(saveName, 'file') || force
-    [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
-    fprintf('\n Saving %s \n', saveName);
-    save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
-                   'param', 'chanOrder', 'clustInfo',  '-v7.3');
+    if isempty(chByCh) % if there's also no channel-by-channel data
+        error('no data to combine!')
+    else
+        mergeChsCombinedData;
+    end
+    if str2double(tmp{2}(3:end)) < 200 % if we're in the old data set (i.e. < CJ200)
+        [sTrain, onsetInds, StimFile, clustInfo] = combineData(rootDir, prefixes);
+        fprintf('\n Saving %s \n', saveName);
+        save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
+                       'param', 'chanOrder', 'clustInfo',  '-v7.3');
+    else % we are in the new dataset of neurostim/marmolab
+        [sTrain, onsetInds, StimFile, chanOrder] = combineDataMarmolab(rootDir, param.allTypes, whichCh);
+
+        fprintf('\n Saving %s \n', saveName);
+        save(saveName, 'sTrain', 'onsetInds', 'StimFile', ...
+                       'param', 'chanOrder', '-v7.3');
+    end
 else
     fprintf('%s already exists.\n', saveName);
     load(saveName, 'param', 'sTrain', 'onsetInds', 'StimFile');  
 end
- 
+
 saveName = sprintf('%s%s%sfRates.mat', rootDir, filesep, fPre);
 if ~exist(saveName, 'file') || force
     [tcs, Zscs, tcs_byFile] = ...
