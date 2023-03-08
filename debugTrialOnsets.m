@@ -22,7 +22,7 @@ for iTrial = 1:length(d.spikes.spk)
 end
 %%
 oriL = unique(oris); 
-subSC = sc(2:end);
+subSC = sc;
 tc = zeros(1, length(oriL));
 for oi = 1:length(oriL)
     theseTrials = oris == oriL(oi);
