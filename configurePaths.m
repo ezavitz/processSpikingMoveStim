@@ -3,7 +3,7 @@ if ismac
     thisPathRoot = '/Users/ezavitz/Documents/code/corrStructure_V1MT/data';
     codeRoot = '~/Documents/code/';
 else
-    thisPathRoot = '~/om94/data';
+    thisPathRoot = '~/om94_scratch/data';
     codeRoot = '~/code/';
 end
 
