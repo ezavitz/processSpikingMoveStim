@@ -6,6 +6,14 @@ It integrates:
 - digital event timing from NEV for stimulus synch
 - information from Stim files (.mat)
 
+# Instructions for use
+There are slurm files to run the batching on the cluster, used in the following order:  
+
+### 1. Extract the spikes from any intan recordings
+`runSpikeExtractNeurostim.sbatch` extracts spikes for each channel in an marmodata file and saves them in spike train format by calling `RUNAnalysis_mdbExtract.m`. The congfiguration for which files this processes is provided in `configureBatch_mdb.m`. 
+
+
+
 It produces the following intermediate data files that are useful for further analysis. 
 
 ![Picture of how things fit together](workflow.jpg)
