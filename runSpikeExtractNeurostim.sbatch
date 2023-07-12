@@ -4,7 +4,7 @@
 #SBATCH --mail-type=END
 #SBATCH --mail-user=elizabeth.zavitz@monash.edu
 #SBATCH --job-name=procSpike
-#SBATCH --time=00:10:00
+#SBATCH --time=00:15:00
 #SBATCH --ntasks=6
 #SBATCH --mem=30000
 #SBATCH --array=1-384

@@ -8,7 +8,7 @@ function [sTrain, onsetInds, StimFile, chanOrder] = ...
     fileList = getFileListFromDirs([rootDir filesep], expression);
     cfg = 'marmodata.cfgs.acute.H64FlexiH64FlexiIntan';
     aSplit = 64; % what channel to split to next area
-
+    
 for iFile = 1:length(fileList)
     
     % marmodata lets you load channels willy-nilly but this will produce
@@ -16,7 +16,9 @@ for iFile = 1:length(fileList)
     % areas) if you don't provide a consecutive list of channels to load. 
     d = marmodata.mdbase([rootDir filesep fileList{iFile}],'loadArgs', ...
     {'loadEye',false,'spikes',true,'source','ghetto', ...
-    'reload',true, 'channels', whichCh, 'useCAR',false}); %% need to remove channels argument to process all
+    'reload',true, 'channels', whichCh, 'useCAR',false, ...
+      'cfg', cfg, 'ephys', 'neurostim.plugins.intan'}); %% need to remove channels argument to process all
+    %, 'ephys', 'neurostim.plugins.intan'
     
     % CREATE ONSET INDS
     % load neurostim file
@@ -30,7 +32,7 @@ for iFile = 1:length(fileList)
     times = times-times(1)+1; 
     tmp = [times; oris; contrast; typeMat-1]; %1 is a magic number here for compatibility 
     onsetInds{iFile}{1} = tmp; onsetInds{iFile}{2} = tmp; %for backwards compatibility with V1/MT recordings on different systems
-    
+    keyboard;
     % CREATE SPIKE TRAIN
     % preallocate
     
