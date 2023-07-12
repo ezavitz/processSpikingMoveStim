@@ -1,16 +1,19 @@
 % setup paths for my laptop vs. on the cluster
 if ismac 
-    thisPathRoot = '/Users/ezavitz/Documents/code/corrStructure_V1MT/data';
+    thisPathRoot = '~/Documents/code/ephys/corrStructure_V1MT/data';
     codeRoot = '~/Documents/code/';
+    subdirs = {'ephys/', 'ephys/', 'ephys/', 'ephys/',...
+               'marmolab/', 'marmolab/', 'marmolab/'};
 else
     thisPathRoot = '~/om94_scratch/data';
     codeRoot = '~/code/';
+    subdirs = {'', '', '', '', '', '', ''};
 end
 
-addpath(genpath([codeRoot 'utilities']))
-addpath(genpath([codeRoot 'NPMK']))
-addpath(genpath([codeRoot 'processSpikingMoveStim'])) 
-addpath(genpath([codeRoot 'neurostim']))
-addpath(genpath([codeRoot 'marmodata'])) 
-addpath(genpath([codeRoot 'marmolab-stimuli'])) 
-addpath(genpath([codeRoot 'marmolab-common'])) 
+addpath(genpath([codeRoot subdirs{1} 'utilities']))
+addpath(genpath([codeRoot subdirs{2} 'NPMK']))
+addpath(genpath([codeRoot subdirs{3} 'processSpikingMoveStim'])) 
+addpath(genpath([codeRoot subdirs{4} 'neurostim']))
+addpath(genpath([codeRoot subdirs{5} 'marmodata'])) 
+addpath(genpath([codeRoot subdirs{6} 'marmolab-stimuli'])) 
+addpath(genpath([codeRoot subdirs{7} 'marmolab-common'])) 

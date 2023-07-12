@@ -1,5 +1,6 @@
+clc
 if ismac 
-    cd('/Users/ezavitz/Documents/code/processSpikingMoveStim');
+    cd('~/Documents/code/ephys/processSpikingMoveStim');
 else
     cd('~/code/processSpikingMoveStim');
 end
