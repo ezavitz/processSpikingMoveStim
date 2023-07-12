@@ -32,7 +32,6 @@ for iFile = 1:length(fileList)
     times = times-times(1)+1; 
     tmp = [times; oris; contrast; typeMat-1]; %1 is a magic number here for compatibility 
     onsetInds{iFile}{1} = tmp; onsetInds{iFile}{2} = tmp; %for backwards compatibility with V1/MT recordings on different systems
-    keyboard;
     % CREATE SPIKE TRAIN
     % preallocate
     
