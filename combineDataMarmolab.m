@@ -3,11 +3,19 @@ function [sTrain, onsetInds, StimFile, chanOrder] = ...
     
     tmp = split(rootDir, filesep); % get the animal mame
     expression = sprintf('%s\\.motionStim\\.[0-9]{6}\\.mat', tmp{end-1});
+    penetration = sprintf('%s/%s', tmp{7}, tmp{8});
 
     % get a list of the neurostim files that are part of this penetration
     fileList = getFileListFromDirs([rootDir filesep], expression);
-    cfg = 'marmodata.cfgs.acute.H64FlexiH64FlexiIntan';
-    aSplit = 64; % what channel to split to next area
+     aSplit = 64; % what channel to split to next area
+
+    % some recordings need different headstage/electrode configurations 
+    switch penetration 
+        case 'CJ221/001'
+            cfg = 'marmodata.cfgs.acute.H64FlexiH64FlexiIntan_NoPortC';
+        otherwise
+            cfg = 'marmodata.cfgs.acute.H64FlexiH64FlexiIntan';
+    end
     
 for iFile = 1:length(fileList)
     
