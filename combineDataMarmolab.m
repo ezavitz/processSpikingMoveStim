@@ -3,7 +3,7 @@ function [sTrain, onsetInds, StimFile, chanOrder] = ...
     
     tmp = split(rootDir, filesep); % get the animal mame
     expression = sprintf('%s\\.motionStim\\.[0-9]{6}\\.mat', tmp{end-1});
-    penetration = sprintf('%s/%s', tmp{7}, tmp{8});
+    penetration = sprintf('%s/%s', tmp{end-1}, tmp{end});
 
     % get a list of the neurostim files that are part of this penetration
     fileList = getFileListFromDirs([rootDir filesep], expression);
