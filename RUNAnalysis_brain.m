@@ -1,5 +1,5 @@
 if ismac 
-    cd('/Users/ezavitz/Documents/code/processSpikingMoveStim');
+    cd('~/Documents/code/ephys/processSpikingMoveStim');
 else
     cd('~/code/processSpikingMoveStim');
 end
@@ -8,7 +8,7 @@ configureBatch;
 
 fPre = ''; % use this to prefix other versions of preprocessed data
 
-force = 0;
+force = 1;
 
 prefixes = {'V1','MT'};
 
@@ -30,7 +30,7 @@ tmp = split(allFiles{pen}, filesep);
 
 saveName = sprintf('%s%s%scombinedData.mat', rootDir, filesep, fPre);
 
-chByCh = getFileListFromDirs(rootDir,'combinedData_P[0-9]+_Ch[0-9]+\.mat');
+chByCh = getFileListFromDirs(rootDir,'combinedData_[0-9]+\.mat');
 
 if ~exist(saveName, 'file') || force
     if str2double(tmp{2}(3:end)) < 200 % if we're in the old data set (i.e. < CJ200)

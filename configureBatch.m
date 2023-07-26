@@ -22,7 +22,7 @@ allFiles = {'/CJ177/007', ...
             '/CJ223/001', ...
             '/CJ223/003'};
         
-fprintf('Pen %i Ch %i \n', pen, whichCh); 
+fprintf('Pen %i \n', pen); 
 
 configurePaths;
 rootDir = [thisPathRoot allFiles{pen}];

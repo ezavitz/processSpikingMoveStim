@@ -6,7 +6,7 @@ contents = dir(pathRoot);
 filenames = {contents.name};
 fileInd = 1;
 for ifile = 1:length(filenames)
-    if regexp(filenames{ifile}, expression)
+    if logical(regexp(filenames{ifile}, expression))
        fileList{fileInd} =  filenames{ifile};
        fileInd = fileInd + 1;
     end

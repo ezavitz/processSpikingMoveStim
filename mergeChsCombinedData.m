@@ -7,7 +7,7 @@ configureBatch;
 configurePaths;
 
 dataDir = sprintf('%s%s%s', thisPathRoot, allFiles{pen}, filesep);
-fileNames = getFileListFromDirs(dataDir, 'combinedData_P[0-9]*_Ch[0-9]*\.mat');
+fileNames = getFileListFromDirs(dataDir, 'combinedData_[0-9]+\.mat');
 
 nCh = length(fileNames); 
 areaBreak = 64; % what channel is the last channel in V1?
@@ -19,7 +19,7 @@ chInd = 1;
 
 for iCh = 1:nCh
     % load the data
-    filename = sprintf('combinedData_P%i_Ch%i.mat', pen, iCh);
+    filename = sprintf('combinedData_%i.mat', iCh);
     fprintf('Loading %s \n', filename); 
     load([dataDir filename])
 
