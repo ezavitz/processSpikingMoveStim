@@ -57,9 +57,11 @@ for iFile = 1:length(fileList)
             offset = aSplit;                    % reset the offset (so we're back at channel 1)
             sTrain{iFile}{aInd} = zeros(nCh, times(end)+5000); % preallocate as before
         end
-        
+        maxDur = size(sTrain{iFile}{aInd}, 2);
+
         for iTrial = 1:length(times)
             sTimes = round(d.spikes.spk{1,iTrial,iCh}*1000 + times(iTrial));
+            sTimes = sTimes(sTimes < maxDur);
             sTrain{iFile}{aInd}(iCh, sTimes) = 1;
         end
     end
