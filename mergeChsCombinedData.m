@@ -1,12 +1,11 @@
 % when data has been processed with spiking from each channel in a separate
 % file, these need to be combined into one file with the appropriate data
 % structures. 
-clear all;
+function [sTrain, onsetInds, StimFile, param] = mergeChsCombinedData(rootDir)
 
-configureBatch; 
 configurePaths;
 
-dataDir = sprintf('%s%s%s', thisPathRoot, allFiles{pen}, filesep);
+dataDir = [rootDir filesep]; %sprintf('%s%s%s', thisPathRoot, allFiles{pen}, filesep);
 fileNames = getFileListFromDirs(dataDir, 'combinedData_[0-9]+\.mat');
 
 nCh = length(fileNames); 
@@ -49,9 +48,6 @@ for iCh = 1:nCh
     end
 end
 
-clear sTrain 
 sTrain = sTrainAll;
-clear sTrainAll
 
-save([dataDir 'combinedData.mat'], ...
-    'sTrain', 'onsetInds', 'StimFile', 'param',  '-v7.3');
+
