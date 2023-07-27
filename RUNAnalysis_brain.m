@@ -42,7 +42,7 @@ if ~exist(saveName, 'file') || force
         if isempty(chByCh) % if there's also no channel-by-channel data
             error('no data to combine!')
         else
-            [sTrain, onsetInds, StimFile, param] = mergeChsCombinedData(rootDir, prefixes);
+            [sTrain, onsetInds, StimFile, param] = mergeChsCombinedData(rootDir);
             clustInfo = [];
             save(saveName, 'sTrain', 'onsetInds', 'StimFile',...
                        'param', 'chanOrder', 'clustInfo',  '-v7.3');
