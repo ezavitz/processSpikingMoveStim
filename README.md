@@ -10,11 +10,10 @@ It integrates:
 There are slurm files to run the batching on the cluster, used in the following order:  
 
 ### 1. Extract the spikes from any intan recordings
-`runSpikeExtractNeurostim.sbatch` extracts spikes for each channel in an marmodata file and saves them in spike train format by calling `RUNAnalysis_mdbExtract.m`. The congfiguration for which files this processes is provided in `configureBatch_mdb.m`. 
+`runSpikeExtractNeurostim.sbatch` extracts spikes for each channel in an marmodata file and saves them in spike train format by calling `RUNAnalysis_mdbExtract.m`. The congfiguration for which files this processes is provided in `configureBatch_mdb.m`. This isn't necessary for the data recorded on Blackrock systems. 
 
-
-
-It produces the following intermediate data files that are useful for further analysis. 
+### 2. Do some basic spike processing
+`runProcessSpiking.sbatch` calls `RUNAnalysis_brain.m` to merge files and channels into aggregate spike trains, tuning curves, sdfs, and exclusion files. It produces the following intermediate data files that are useful for further analysis. 
 
 ![Picture of how things fit together](workflow.jpg)
 
