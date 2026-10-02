@@ -19,14 +19,13 @@ for a = 1:length(prefixes)
     fileList = getFileListFromDirs(pathRoot, '[0-9][0-9][0-9]');
         
     % LOAD (ONE BATCH)
-    clust.clusterInfo = readmatrix([pathRoot 'kilosort2/cluster_info.tsv'], 'FileType', 'Text', 'OutputType', 'string');
-    clust.index = 1:size(clust.clusterInfo,1);
-
-    clust.isUnit = clust.clusterInfo(:,9) == 'good' | ...
-                   clust.clusterInfo(:,9) == 'mua';
-    clust.isSU   = clust.clusterInfo(:,9) == 'good';
-    clust.ch     = clust.clusterInfo(clust.isUnit, 6); 
+    % Select curated clusters by Kilosort cluster ID. Until 2026-10-02 this
+    % used the row numbers of cluster_info.tsv (clust.index = 1:N), which
+    % exported the wrong clusters; see selectSortedClusters.
+    [clusterInfo, header] = readClusterInfo([pathRoot 'kilosort2/cluster_info.tsv']);
+    clust = selectSortedClusters(clusterInfo, header);
     clusters{a} = clust; 
+    nSpikesPerUnit = zeros(1, numel(clust.unitIDs));
     
     for f = 1:length(fileList)
         fprintf(' %s ', fileList{f})
@@ -99,6 +98,8 @@ for a = 1:length(prefixes)
 
         % make that spike train
         getUnits = ismember(spike.cluster, clust.index(clust.isUnit));
+        [~, unitRow] = ismember(double(spike.cluster(getUnits)), clust.unitIDs);
+        nSpikesPerUnit = nSpikesPerUnit + accumarray(unitRow(:), 1, [numel(clust.unitIDs) 1])';
         sTrain{f}{a} = buildSpikeTrain(spike.ms(getUnits), spike.cluster(getUnits), 1000, clust.index(clust.isUnit)); 
         isSU{a}      = ismember(clust.index(clust.isUnit), clust.index(clust.isSU)); % logical index to SU clusters
         % ------- STIMULUS EVENTS
@@ -122,5 +123,9 @@ for a = 1:length(prefixes)
             sortInfo{f,a}.amps        = spike.amp;
             sortInfo{f,a}.cluster     = spike.cluster;
         end
+    end
+    if any(nSpikesPerUnit == 0)
+        warning('combineData:EmptyUnit', '%s: %d curated unit(s) have no spikes in any file: IDs %s', ...
+            prefixes{a}, sum(nSpikesPerUnit == 0), mat2str(clust.unitIDs(nSpikesPerUnit == 0)));
     end
 end
